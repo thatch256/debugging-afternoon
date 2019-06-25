@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StoreFront from "./Components/StoreFront/StoreFront";
 import ShoppingCart from "./Components/ShoppingCart/ShoppingCart";
 import NavBar from "./Components/NavBar/NavBar";
+import axios from 'axios'
 
 class App extends Component {
   constructor(props) {
@@ -16,19 +17,18 @@ class App extends Component {
     this.navigate = this.navigate.bind(this);
   }
   componentDidMount() {
-    axios
-      .get("https://practiceapi.devmountain.com/products/")
+    axios.get("https://practiceapi.devmountain.com/products/")
       .then(response => {
         this.setState({
           products: response.data
         });
       });
   }
-  addToCart(item) {
-    this.setState({
+  addToCart(item) { 
+    this.setState({ 
       cart: [...this.state.cart, item]
-    });
-  }
+    }); 
+  } 
   removeFromCart(index) {
     let cartCopy = this.state.cart.slice();
     cartCopy.splice(index, 1);
@@ -54,9 +54,9 @@ class App extends Component {
         <NavBar navigate={this.navigate} />
         <div className="main-container">
           {showCart ? (
-            <ShoppingCart cart={cart} />
+            <ShoppingCart cart={this.state.cart} removeFromCart={this.removeFromCart}/>
           ) : (
-            <StoreFront products={products} />
+            <StoreFront products={products} addToCart={this.addToCart}/>
           )}
         </div>
       </div>
